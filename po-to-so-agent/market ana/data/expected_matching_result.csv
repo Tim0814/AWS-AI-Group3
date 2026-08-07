@@ -1,0 +1,8 @@
+demand_id,result_type,suggested_so_draft_id,customer_id,sku_id,allocated_qty,suggested_delivery_date,linked_production_order_id,linked_batch_no,exception_type,match_reason,human_confirm_required
+DEM-001,sales_order_draft,SO-DRAFT-001,CUS-A01,FG-1001,400,2026-08-10,PO-20260807-001,BAT-260810-A,,品號通過；可分配量1050>=400；完成日08-10<=交期08-12；優先級高,Y
+DEM-002,sales_order_draft,SO-DRAFT-002,CUS-B02,FG-1002,200,2026-08-11,PO-20260807-001,BAT-260811-B,,品號通過；可分配量580>=200；完成日08-11<=交期08-13；優先級中,Y
+DEM-003,sales_order_draft,SO-DRAFT-003,CUS-C03,FG-1003,350,2026-08-09,PO-20260807-001,BAT-260809-C,,品號通過；可分配量600>=350；完成日08-09<=交期08-11；優先級高且效期敏感,Y
+DEM-004,exception,,CUS-D04,FG-1001,0,,PO-20260807-001,BAT-260810-A,數量不足,DEM-001占用後剩餘650<需求700；不自動部分出貨,Y
+DEM-005,exception,,CUS-E05,FG-1004,0,,PO-20260807-001,BAT-260815-D,交期衝突,數量充足但完成日08-15>交期08-12,Y
+DEM-006,exception,,CUS-F06,FG-9999,0,,,,品號不一致,FG-9999不存在於商品主檔,Y
+ORPHAN-FG-1005,exception,,,,,PO-20260807-001,BAT-260810-E,孤兒生產,FG-1005有產出200+庫存30但無客戶需求匹配,Y

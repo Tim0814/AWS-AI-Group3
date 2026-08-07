@@ -1,0 +1,6 @@
+production_order_id,line_no,sku_id,sku_name,qty,unit,planned_finish_date,batch_no,plant,status
+PO-20260807-001,1,FG-1001,原味無糖豆漿,1000,箱,2026-08-10,BAT-260810-A,廠區A,completed
+PO-20260807-001,2,FG-1002,巧克力調味乳,500,箱,2026-08-11,BAT-260811-B,廠區A,completed
+PO-20260807-001,3,FG-1003,全麥吐司,600,箱,2026-08-09,BAT-260809-C,廠區A,completed
+PO-20260807-001,4,FG-1004,原味優格,400,箱,2026-08-15,BAT-260815-D,廠區A,in_progress
+PO-20260807-001,5,FG-1005,經典雞湯麵,200,箱,2026-08-10,BAT-260810-E,廠區A,completed

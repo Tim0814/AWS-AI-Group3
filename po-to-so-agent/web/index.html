@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>產銷配貨 Agent · PO→SO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="top">
+      <div class="brand-block">
+        <p class="eyebrow">食品製造 · 產銷協同</p>
+        <h1>產銷配貨 <span>Agent</span></h1>
+        <p class="tagline">生產訂單 → 銷售訂單草稿 · 規則匹配 · 人工確認</p>
+      </div>
+      <div class="actions">
+        <button id="btn-run" class="btn primary" type="button">執行 Agent</button>
+        <button id="btn-confirm-all" class="btn ghost" type="button" disabled>確認全部草稿</button>
+      </div>
+    </header>
+
+    <section class="status-bar" id="status-bar" aria-live="polite">
+      <div class="stat"><span class="label">狀態</span><strong id="stat-stage">尚未執行</strong></div>
+      <div class="stat"><span class="label">草稿</span><strong id="stat-drafts">—</strong></div>
+      <div class="stat"><span class="label">例外</span><strong id="stat-exc">—</strong></div>
+      <div class="stat"><span class="label">需求</span><strong id="stat-demands">—</strong></div>
+    </section>
+
+    <section class="log" id="log-section" hidden>
+      <h2>Agent 流程訊息</h2>
+      <ul id="log-list"></ul>
+    </section>
+
+    <main class="workspace">
+      <section class="panel" id="drafts-panel">
+        <div class="panel-head">
+          <h2>銷售訂單草稿</h2>
+          <p>通過匹配的建議分配，確認後才可視為可建立正式訂單（不寫入 ERP）。</p>
+        </div>
+        <div id="drafts-list" class="list empty-hint">請先執行 Agent</div>
+      </section>
+
+      <section class="panel" id="exc-panel">
+        <div class="panel-head">
+          <h2>例外待決</h2>
+          <p>數量不足、交期衝突、品號不一致、孤兒生產 — 必須人工決裁。</p>
+        </div>
+        <div id="exc-list" class="list empty-hint">請先執行 Agent</div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Rule decides · Explain · Human confirms</span>
+      <span>第 3 組 Demo · 模擬資料</span>
+    </footer>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
