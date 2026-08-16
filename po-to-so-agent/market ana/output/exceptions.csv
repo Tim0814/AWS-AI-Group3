@@ -1,5 +1,0 @@
-﻿demand_id,exception_type,customer_id,customer_name,sku_id,sku_name,requested_qty,allocated_qty,required_delivery_date,suggested_delivery_date,linked_production_order_id,linked_batch_no,match_reason,suggestion,human_confirm_required,confirm_status
-DEM-005,交期衝突,CUS-E05,模擬經銷商戊,FG-1004,原味優格,100,0,2026-08-12,2026-08-15,PO-20260807-001,BAT-260815-D,品號通過；可分配量 480 ≥ 需求 100；但預計完成日 2026-08-15 晚於客戶交期 2026-08-12。,與客戶協商延交、評估改配既有庫存，或取消／改單。需人工決裁。,Y,pending
-DEM-004,數量不足,CUS-D04,模擬企業客戶丁,FG-1001,原味無糖豆漿,700,0,2026-08-14,2026-08-10,PO-20260807-001,BAT-260810-A,品號通過；目前可分配量剩餘 650 < 需求 700；依規則不自動部分出貨。,削量、拆單、尋找其他來源，或調整優先序後重跑。需人工決裁。,Y,pending
-DEM-006,品號不一致,CUS-F06,模擬零售通路己,FG-9999,植物奶綜合組,50,0,2026-08-16,,,,FG-9999 不存在於商品主檔，無法進行分配。,請訂單人員確認正確品號或更新主檔後重跑。,Y,pending
-ORPHAN-FG-1005,孤兒生產,,,FG-1005,經典雞湯麵,0,0,,2026-08-10,PO-20260807-001,BAT-260810-E,FG-1005 可分配量 230，但沒有對應客戶需求可匹配。,評估改配其他客戶、促銷、或暫存並監控效期。需人工決裁。,Y,pending
