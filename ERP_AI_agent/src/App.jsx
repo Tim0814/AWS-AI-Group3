@@ -7,16 +7,22 @@ import OrderTable from './components/orders/OrderTable';
 import OrderForm from './components/orders/OrderForm';
 import AnalysisDrawer from './components/review/AnalysisDrawer';
 import ImportPanel from './components/import/ImportPanel';
+import CustomerTable from './components/customers/CustomerTable';
+import CustomerForm from './components/customers/CustomerForm';
+import ShipmentTable from './components/shipments/ShipmentTable';
+import ShipmentForm from './components/shipments/ShipmentForm';
 import { Alert } from './components/ui';
 
-const TABS = ['Dashboard', '訂單管理', 'CSV 匯入'];
+const TABS = ['Dashboard', '訂單管理', '客戶管理', '出貨紀錄', 'CSV 匯入'];
 
 export default function App() {
   const { state, dispatch } = useStore();
   const [tab, setTab] = useState('Dashboard');
   const [selected, setSelected] = useState(null);
-  const [editing, setEditing] = useState(null); // null | false | order
+  const [editing, setEditing] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [editingCustomer, setEditingCustomer] = useState(null);
+  const [editingShipment, setEditingShipment] = useState(null);
 
   const enriched = runEngine(state);
   const existingIds = new Set(state.orders.map(o => o.order_id));
@@ -32,14 +38,25 @@ export default function App() {
     else setConfirmDelete(id);
   }
 
-  function handleReview(id, status) {
-    dispatch({ type: 'SET_REVIEW', id, status });
+  function handleReview(id, status, meta = {}) {
+    dispatch({ type: 'SET_REVIEW', id, status, ...meta });
     setSelected(prev => prev ? { ...prev, review_status: status } : null);
   }
 
   function handleImport(key, rows) {
     if (key === 'orders') dispatch({ type: 'IMPORT_ORDERS', rows });
     else dispatch({ type: 'IMPORT_DATA', key, rows });
+  }
+
+  function handleSaveCustomer(form) {
+    if (editingCustomer === false) dispatch({ type: 'ADD_CUSTOMER', payload: form });
+    else dispatch({ type: 'UPDATE_CUSTOMER', payload: form });
+    if (!state._error) setEditingCustomer(null);
+  }
+
+  function handleSaveShipment(form) {
+    if (editingShipment === false) dispatch({ type: 'ADD_SHIPMENT', payload: form });
+    setEditingShipment(null);
   }
 
   const selectedEnriched = selected
@@ -56,7 +73,7 @@ export default function App() {
             <small>外接 ERP 決策輔助系統 · 不直接寫入 ERP</small>
           </div>
         </div>
-        <nav style={{ display: 'flex', gap: 8 }}>
+        <nav style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {TABS.map(t => (
             <button key={t} className={`btn${tab === t ? ' primary' : ''}`} onClick={() => setTab(t)}>{t}</button>
           ))}
@@ -80,7 +97,7 @@ export default function App() {
 
         {tab === 'Dashboard' && (
           <>
-            <KpiRow enriched={enriched} />
+            <KpiRow enriched={enriched} shipments={state.shipments} />
             <div className="grids" style={{ marginTop: 16 }}>
               <div className="panel" style={{ padding: 16 }}>
                 <div className="section-head">
@@ -90,7 +107,7 @@ export default function App() {
               </div>
               <div className="panel" style={{ padding: 16 }}>
                 <div className="section-head">
-                  <div><h2>各區配送概覽</h2><p>區域為 MVP 假設，需由 ERP 正式欄位取代</p></div>
+                  <div><h2>各區配送概覽</h2><p>區域為 ERP 正式欄位</p></div>
                 </div>
                 <RegionChart orders={state.orders} />
               </div>
@@ -119,17 +136,66 @@ export default function App() {
           </>
         )}
 
+        {tab === '客戶管理' && (
+          <>
+            <div className="actions" style={{ marginBottom: 12 }}>
+              <button className="btn primary" onClick={() => setEditingCustomer(false)}>＋ 新增客戶</button>
+            </div>
+            <CustomerTable
+              customers={state.customers}
+              onEdit={c => setEditingCustomer(c)}
+              onDelete={id => dispatch({ type: 'DELETE_CUSTOMER', id })}
+            />
+          </>
+        )}
+
+        {tab === '出貨紀錄' && (
+          <>
+            <div className="actions" style={{ marginBottom: 12 }}>
+              <button className="btn primary" onClick={() => setEditingShipment(false)}>＋ 新增出貨</button>
+            </div>
+            <ShipmentTable
+              shipments={state.shipments}
+              warehouses={state.warehouses}
+              onStatusChange={(id, status) => dispatch({ type: 'PATCH_SHIPMENT_STATUS', id, status })}
+              onDelete={id => dispatch({ type: 'DELETE_SHIPMENT', id })}
+            />
+          </>
+        )}
+
         {tab === 'CSV 匯入' && (
           <ImportPanel onImport={handleImport} />
         )}
       </div>
 
-      {(editing !== null) && (
+      {editing !== null && (
         <OrderForm
           initial={editing || null}
           existingIds={existingIds}
+          customers={state.customers}
+          products={state.products}
           onSave={handleSave}
           onCancel={() => setEditing(null)}
+        />
+      )}
+
+      {editingCustomer !== null && (
+        <CustomerForm
+          initial={editingCustomer || null}
+          existingIds={new Set(state.customers.map(c => c.customer_id))}
+          onSave={handleSaveCustomer}
+          onCancel={() => setEditingCustomer(null)}
+        />
+      )}
+
+      {editingShipment !== null && (
+        <ShipmentForm
+          initial={editingShipment || null}
+          orders={state.orders}
+          warehouses={state.warehouses}
+          existingIds={new Set(state.shipments.map(s => s.shipment_id))}
+          onSave={handleSaveShipment}
+          onCancel={() => setEditingShipment(null)}
         />
       )}
 
